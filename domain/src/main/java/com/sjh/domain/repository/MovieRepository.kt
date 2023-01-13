@@ -1,8 +1,8 @@
 package com.sjh.domain.repository
 
-import com.sjh.domain.model.Movie
+import com.sjh.domain.model.SearchResultEntity
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    suspend fun getNaverMovieList() : Flow<List<Movie>>
+    suspend fun getNaverMovieList(title: String?): Flow<SearchResultEntity>
 }

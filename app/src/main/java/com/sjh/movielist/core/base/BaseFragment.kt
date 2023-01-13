@@ -14,6 +14,7 @@ abstract class BaseFragment<VB : ViewDataBinding, VM : BaseViewModel>(@LayoutRes
     private var _binding : VB? = null
     protected val binding get() = _binding!!
     protected abstract val viewModel: VM
+    protected abstract val bindingId: Int
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,6 +28,7 @@ abstract class BaseFragment<VB : ViewDataBinding, VM : BaseViewModel>(@LayoutRes
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
+        binding.setVariable(bindingId, viewModel)
     }
 
     override fun onDestroyView() {

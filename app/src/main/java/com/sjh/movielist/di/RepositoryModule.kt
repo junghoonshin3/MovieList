@@ -18,6 +18,9 @@ class RepositoryModule {
     @Provides
     fun provideMovieRepository(
         movieService: MovieService,
-        movieDatabase: MovieDatabase
-    ) : MovieRepository = MovieRepositoryImpl(movieService, movieDatabase)
+//        movieDatabase: MovieDatabase
+    ): MovieRepository = MovieRepositoryImpl(
+        movieService,
+//        movieDatabase
+    )
 }

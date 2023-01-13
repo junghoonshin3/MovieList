@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -18,13 +19,17 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
-    fun provideBaseUrl() = "https://openapi.naver.com/v1/search"
+    fun provideBaseUrl() = "https://openapi.naver.com/"
 
     @Singleton
     @Provides
     fun provideOkHttpClient() = OkHttpClient.Builder().run {
         val interceptor = AppInterceptor()
         addInterceptor(interceptor)
+        addInterceptor(HttpLoggingInterceptor().apply {
+            setLevel(HttpLoggingInterceptor.Level.BODY)
+        })
+        build()
     }
 
     @Singleton
@@ -45,8 +50,8 @@ object NetworkModule {
     class AppInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
             val newRequest =
-                request().newBuilder().addHeader("X-Naver-Client-Id", "${R.string.client_id}")
-                    .addHeader("X-Naver-Client-Secret", "${R.string.client_secret}")
+                request().newBuilder().addHeader("X-Naver-Client-Id", "9IqxHXBwgwq8Ye5cBaql")
+                    .addHeader("X-Naver-Client-Secret", "JfnYmgeSe1")
                     .build()
             proceed(newRequest)
         }
