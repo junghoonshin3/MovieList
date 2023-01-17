@@ -1,46 +1,70 @@
 package com.sjh.movielist.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.sjh.domain.usecase.GetNaverMovieUseCase
+import com.sjh.domain.model.BoxOfficeResultEntity
+import com.sjh.domain.model.MovieEntity
+import com.sjh.domain.usecase.GetBoxOfficeMovieUseCase
+import com.sjh.domain.usecase.GetNaverMovieListUseCase
 import com.sjh.movielist.core.base.BaseViewModel
+import com.sjh.movielist.core.extension.MutableEventFlow
+import com.sjh.movielist.core.extension.asEventFlow
+import com.sjh.movielist.view.MovieListAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
-    private val getNaverMovieUseCase: GetNaverMovieUseCase
+    private val getBoxOfficeUseCase: GetBoxOfficeMovieUseCase,
+    private val getNaverMovieUseCase: GetNaverMovieListUseCase
 ) : BaseViewModel() {
+
+    init {
+        viewModelScope.launch {
+            getBoxOfficeList()
+        }
+    }
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _test: MutableStateFlow<String> = MutableStateFlow("테스트용")
-    val test: StateFlow<String> = _test
+    private val _searchResult: MutableStateFlow<List<MovieEntity>?> = MutableStateFlow(null)
+    val searchResult: StateFlow<List<MovieEntity>?> = _searchResult
 
 
-    init {
-        getNaverMovieList("슬램덩크")
-    }
-
-    fun getNaverMovieList(title: String?) {
+    suspend fun getBoxOfficeList() {
         viewModelScope.launch(Dispatchers.IO) {
-            getNaverMovieUseCase.invoke(title).onStart {
-                _isLoading.value = true
-            }.catch {
+            getBoxOfficeUseCase().onStart { _isLoading.value = true }.catch {
 
             }.collect {
                 _isLoading.value = false
+                var list = it.boxOfficeResult.dailyBoxOfficeList.map { movie ->
+                    delay(500)
+                    async(Dispatchers.IO) {
 
+                        getNaverMovie(movie.movieNm)
+                            .filter {
+                                it.items.isNotEmpty()
+                            }
+                            .collect { naverMovie ->
+                                var imageUrl = naverMovie.items[0].image
+                                movie.movieUrl = imageUrl
+                            }
+                    }
+                    movie
+                }
+                _searchResult.value = list
             }
         }
     }
+
+
+    suspend fun getNaverMovie(title: String) = getNaverMovieUseCase.invoke(title)
+
 
 }

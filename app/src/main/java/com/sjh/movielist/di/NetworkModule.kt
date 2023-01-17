@@ -19,7 +19,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
-    fun provideBaseUrl() = "https://openapi.naver.com/"
+    fun provideBaseUrl() = "http://kobis.or.kr/"
 
     @Singleton
     @Provides

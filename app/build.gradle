@@ -84,5 +84,7 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
+    //스켈레톤 UI
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
 }

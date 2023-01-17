@@ -1,9 +1,9 @@
-package com.sjh.domain.model
+package com.sjh.data.remote.model
 
-data class SearchResultEntity(
+data class NaverMovieList(
     val lastBuildDate: String,
     val total: String,
     val start: String,
     val display: String,
-    val items: List<MovieEntity>
+    val items: List<NaverMovie>
 )
