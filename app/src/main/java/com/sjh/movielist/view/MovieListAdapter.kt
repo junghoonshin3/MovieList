@@ -10,17 +10,17 @@ import com.sjh.movielist.databinding.RvMovieItemBinding
 class MovieListAdapter(items: List<TMDBMovieEntity>) :
     BaseRecyclerViewAdapter<TMDBMovieEntity, RvMovieItemBinding>(items) {
 
-    private val newList = listOf(items.last()) + items + listOf(items.first())
+//    private val newList = listOf(items.last()) + items + listOf(items.first())
 
     override fun getLayoutResId(): Int = R.layout.rv_movie_item
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        holder.binding?.movieItem = newList[position]
+        holder.binding?.movieItem = items[position % items.size]
 
     }
 
     override fun getItemCount(): Int {
-        return newList.size
+        return Int.MAX_VALUE
     }
 
 

@@ -30,7 +30,6 @@ class MovieListFragment :
                     it?.let {
                         viewPagerInit(this, it)
                     }
-
                 }
 
             }
@@ -42,41 +41,12 @@ class MovieListFragment :
         items.let { it ->
             vp.apply {
                 adapter = MovieListAdapter(it)
-                currentItem = 1
+                currentItem = 1000
                 offscreenPageLimit = 2
                 setPageTransformer(ZoomOutPageTransformer())
-                onInfinitePageChangeCallback(this, it.size + 2)
             }
 
         }
     }
 
-    private fun onInfinitePageChangeCallback(vp: ViewPager2, listSize: Int) {
-        vp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
-
-                if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                    when (vp.currentItem) {
-                        listSize - 1 -> {
-                            vp.setCurrentItem(1, false)
-                        }
-                        0 -> {
-                            vp.setCurrentItem(listSize - 2, false)
-                        }
-                    }
-                }
-            }
-
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                if (position != 0 && position != listSize - 1) {
-                    // pageIndicatorView.setSelected(position-1)
-                    Log.i("sjh","${position}")
-                }
-            }
-        })
-    }
 }
