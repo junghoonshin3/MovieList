@@ -2,13 +2,10 @@ package com.sjh.movielist.view
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.sjh.domain.model.TMDBMovieEntity
 import com.sjh.movielist.BR
 import com.sjh.movielist.R
 import com.sjh.movielist.core.base.BaseFragment
@@ -16,13 +13,6 @@ import com.sjh.movielist.core.extension.repeatOnStarted
 import com.sjh.movielist.databinding.FragmentMovieListBinding
 import com.sjh.movielist.viewmodel.MovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MovieListFragment :
@@ -35,11 +25,58 @@ class MovieListFragment :
 
         //생명주기에 따라 onStart일때 collect , onStop일때 cancel
         repeatOnStarted {
-            viewModel.searchResult.collect {
-                binding.rvMovieList.adapter = it?.let { it -> MovieListAdapter(it) }
+            binding.vp2MovieList.apply {
+                viewModel.searchResult.collect {
+                    it?.let {
+                        viewPagerInit(this, it)
+                    }
+
+                }
+
             }
+
         }
     }
 
+    private fun viewPagerInit(vp: ViewPager2, items: List<TMDBMovieEntity>) {
+        items.let { it ->
+            vp.apply {
+                adapter = MovieListAdapter(it)
+                currentItem = 1
+                offscreenPageLimit = 2
+                setPageTransformer(ZoomOutPageTransformer())
+                onInfinitePageChangeCallback(this, it.size + 2)
+            }
 
+        }
+    }
+
+    private fun onInfinitePageChangeCallback(vp: ViewPager2, listSize: Int) {
+        vp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    when (vp.currentItem) {
+                        listSize - 1 -> {
+                            vp.setCurrentItem(1, false)
+                        }
+                        0 -> {
+                            vp.setCurrentItem(listSize - 2, false)
+                        }
+                    }
+                }
+            }
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                if (position != 0 && position != listSize - 1) {
+                    // pageIndicatorView.setSelected(position-1)
+                    Log.i("sjh","${position}")
+                }
+            }
+        })
+    }
 }

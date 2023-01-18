@@ -6,35 +6,53 @@
 
         <variable
             name="movieItem"
-            type="com.sjh.domain.model.MovieEntity" />
+            type="com.sjh.domain.model.TMDBMovieEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_movie_thumnail"
-            imgResId="@{movieItem.movieUrl}"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/tv_movie_title"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:strokeWidth="1dp">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_movie_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="100dp"
-            android:text="@{movieItem.movieNm}"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/iv_movie_thumnail"
-            app:layout_constraintStart_toStartOf="@+id/iv_movie_thumnail"
-            app:layout_constraintTop_toBottomOf="@+id/iv_movie_thumnail" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_movie_thumnail"
+                    imgResId="@{movieItem.poster_path}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_movie_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_movie_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:minWidth="100dp"
+                    android:text="@{movieItem.title}"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_movie_thumnail"
+                    app:layout_constraintStart_toStartOf="@+id/iv_movie_thumnail"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_movie_thumnail" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

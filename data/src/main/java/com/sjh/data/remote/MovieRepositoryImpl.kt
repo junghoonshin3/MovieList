@@ -80,5 +80,35 @@ class MovieRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getTMDBMovieList(): Flow<TMDBMovieResultEntity> {
+        return flow {
+            val temp = service.getTMDBMovie()
+            val data = TMDBMovieResultEntity(
+                temp.page,
+                temp.results.map {
+                    TMDBMovieEntity(
+                        it.adult,
+                        it.backdrop_path,
+                        it.genre_ids,
+                        it.id,
+                        it.original_language,
+                        it.original_title,
+                        it.overview,
+                        it.popularity,
+                        "https://image.tmdb.org/t/p/original"+it.poster_path,
+                        it.release_date,
+                        it.title,
+                        it.video,
+                        it.vote_average,
+                        it.vote_count
+                    )
+                },
+                temp.total_pages,
+                temp.total_results,
+            )
+            emit(data)
+        }.flowOn(Dispatchers.IO)
+    }
+
 
 }
