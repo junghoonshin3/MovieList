@@ -1,5 +1,9 @@
 package com.sjh.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class TMDBMovieEntity(
     val adult: Boolean,
     val backdrop_path: String?="",
@@ -15,4 +19,4 @@ data class TMDBMovieEntity(
     val video: Boolean,
     val vote_average: String,
     val vote_count: String,
-)
+) : Parcelable

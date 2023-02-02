@@ -1,14 +1,28 @@
 package com.sjh.movielist.core.base
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.sjh.movielist.BR
 
-abstract class BaseRecyclerViewAdapter<T, VDB : ViewDataBinding>(var items: List<T>) :
+abstract class BaseRecyclerViewAdapter<T, VDB : ViewDataBinding>(
+    var items: List<T>
+) :
     RecyclerView.Adapter<BaseRecyclerViewAdapter<T, VDB>.BaseViewHolder>() {
+
+    interface OnItemClickListener<T> {
+        fun onClick(item: T, position: Int)
+    }
+
+    var listener: OnItemClickListener<T>? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener<T>) {
+        this.listener = listener
+    }
 
     @LayoutRes
     abstract fun getLayoutResId(): Int

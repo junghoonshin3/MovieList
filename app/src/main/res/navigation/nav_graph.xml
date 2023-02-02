@@ -11,9 +11,14 @@
         <action
             android:id="@+id/action_movieListFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/movieDetailFragment"
         android:name="com.sjh.movielist.view.MovieDetailFragment"
-        android:label="MovieDetailFragment" />
+        android:label="MovieDetailFragment" >
+        <argument
+            android:name="movieItem"
+            app:argType="com.sjh.domain.model.TMDBMovieEntity" />
+    </fragment>
 </navigation>

@@ -1,5 +1,7 @@
 package com.sjh.movielist.view
 
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.viewModels
 import com.sjh.movielist.BR
 import com.sjh.movielist.R
@@ -13,4 +15,10 @@ class MovieDetailFragment :
     BaseFragment<FragmentMovieDetailBinding, MovieDetailViewModel>(R.layout.fragment_movie_detail) {
     override val viewModel: MovieDetailViewModel by viewModels()
     override val bindingId: Int = BR.detail
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        
+    }
+
 }

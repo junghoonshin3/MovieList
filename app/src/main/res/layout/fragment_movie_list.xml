@@ -8,6 +8,7 @@
         <variable
             name="list"
             type="com.sjh.movielist.viewmodel.MovieListViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,11 +17,13 @@
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp2_movie_list"
+            itemClickListener="@{list.itemClickListener}"
+            items="@{list.searchResult}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:clipToPadding="false"
             android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
